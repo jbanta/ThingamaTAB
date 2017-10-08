@@ -7,12 +7,12 @@
 	<!-- Load external PaperScript and associate it with myCanvas -->
 	<script type="text/paperscript" canvas="theCanvas4">
 
-        var point = new Point(20, 20);
+        var point = new Point(0, 0);
         var size = new Size(20, 60);
         var myRectangle = new Path.Rectangle(point, size);
         var rectangles = [];
         var speeds = []; //array of speeds of individual rectangles
-        numRectangles = 9;
+        numRectangles = 5;
         var fastCircle = new Path.Circle({
             center: [140, 70],
             radius: 50,
@@ -37,7 +37,7 @@
         //construct the rectangles
         for (var i = 0; i < numRectangles; i++) {
             rectangles[i] = new Path.Rectangle({
-                point: [100 + (i * 130), 275],
+                point: [ (window.innerWidth / 6 ) + i*(window.innerWidth / 6), window.innerHeight / 2.2],
                 size: [20, 60],
                 fillColor: '#473109'
             });
@@ -47,7 +47,7 @@
         slowCircle.onMouseDown = function(event) {
             for (var i = 0; i < numRectangles; i++) {
                 speeds[i] -= 10;
-                
+
             }
         }
         fastCircle.onMouseDown = function(event) {
@@ -72,18 +72,18 @@
         rectangles[4].onMouseMove = function(event) { //RECT 5
             speeds[4] += 3;
         }
-        rectangles[5].onMouseMove = function(event) { //RECT 6
-            speeds[5] += 3;
-        }
-        rectangles[6].onMouseMove = function(event) { //RECT 7
-            speeds[6] += 3;
-        }
-        rectangles[7].onMouseMove = function(event) { //RECT 8
-            speeds[7] += 3;
-        }
-        rectangles[8].onMouseMove = function(event) { //RECT 9
-            speeds[8] += 3;
-        }
+        // rectangles[5].onMouseMove = function(event) { //RECT 6
+        //     speeds[5] += 3;
+        // }
+        // rectangles[6].onMouseMove = function(event) { //RECT 7
+        //     speeds[6] += 3;
+        // }
+        // rectangles[7].onMouseMove = function(event) { //RECT 8
+        //     speeds[7] += 3;
+        // }
+        // rectangles[8].onMouseMove = function(event) { //RECT 9
+        //     speeds[8] += 3;
+        // }
         /******* End of Individual Mouse Functions ********/
 
         function onFrame(event) {
