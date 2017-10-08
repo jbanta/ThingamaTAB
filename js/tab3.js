@@ -19,6 +19,7 @@
              strokeWidth: 20,
              strokeCap: 'round'
              });
+             
 
 
              // Add a segment to the path where
@@ -44,7 +45,7 @@
              }
              path.smooth({ type: 'continuous' });
          }
-         
+
          /* text */
          var text = new PointText(view.center);
          text.content = 'Draw!';

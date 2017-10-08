@@ -14,6 +14,7 @@ function onMouseMove(event) {
   mousePosition = event.point;
 }
 
+
 function onFrame(event) {
   circles[1].position = mousePosition;
   for (i = 2; i < 8; i++) {
