@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>spinny things</title>
+	<!-- Load the Paper.js library -->
+	<script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
+	<!-- Load external PaperScript and associate it with myCanvas -->
+	<script type="text/paperscript" canvas="theCanvas4">
+
+        var point = new Point(20, 20);
+        var size = new Size(20, 60);
+        var myRectangle = new Path.Rectangle(point, size);
+        var rectangles = [];
+        var speeds = []; //array of speeds of individual rectangles
+        numRectangles = 9;
+        var fastCircle = new Path.Circle({
+            center: [140, 70],
+            radius: 50,
+            fillColor: '#473109'
+        })
+        var text = new PointText(new Point(140, 70));
+            text.justification = 'center';
+            text.fillColor = 'white';
+            text.content = 'FASTER';
+
+        var slowCircle = new Path.Circle({
+            center: [1100, 70],
+            radius: 50,
+            fillColor: '#473109'
+        })
+
+        var text = new PointText(new Point(1100, 70));
+            text.justification = 'center';
+            text.fillColor = 'white';
+            text.content = 'SLOWER';
+
+        //construct the rectangles
+        for (var i = 0; i < numRectangles; i++) {
+            rectangles[i] = new Path.Rectangle({
+                point: [100 + (i * 130), 275],
+                size: [20, 60],
+                fillColor: '#473109'
+            });
+
+            speeds[i] = 0;
+        }
+        slowCircle.onMouseDown = function(event) {
+            for (var i = 0; i < numRectangles; i++) {
+                if (speeds[i] > 0) {
+                    speeds[i] -= 20;
+                }
+            }
+        }
+        fastCircle.onMouseDown = function(event) {
+            for (var i = 0; i < numRectangles; i++) {
+                speeds[i] += 20;
+            }
+        }
+        /******** Start of Individual Mouse Functions *******/
+
+        rectangles[0].onMouseMove = function(event) { //RECT 1
+            speeds[0] += 3;
+        }
+        rectangles[1].onMouseMove = function(event) { //RECT 2
+            speeds[1] += 3;
+        }
+        rectangles[2].onMouseMove = function(event) { //RECT 3
+            speeds[2] += 3;
+        }
+        rectangles[3].onMouseMove = function(event) { //RECT 4
+            speeds[3] += 3;
+        }
+        rectangles[4].onMouseMove = function(event) { //RECT 5
+            speeds[4] += 3;
+        }
+        rectangles[5].onMouseMove = function(event) { //RECT 6
+            speeds[5] += 3;
+        }
+        rectangles[6].onMouseMove = function(event) { //RECT 7
+            speeds[6] += 3;
+        }
+        rectangles[7].onMouseMove = function(event) { //RECT 8
+            speeds[7] += 3;
+        }
+        rectangles[8].onMouseMove = function(event) { //RECT 9
+            speeds[8] += 3;
+        }
+        /******* End of Individual Mouse Functions ********/
+
+        function onFrame(event) {
+            for (var i = 0; i < numRectangles; i++) {
+
+                if (speeds[i] - (event.count / 30) > 0) {
+                    rectangles[i].rotate(speeds[i] - (event.count / 30));
+                 }
+
+                }
+        }
+	</script>
+	<!-- Load CSS stylesheet -->
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<canvas id="theCanvas4"></canvas>
+
+</body>
+</html>
