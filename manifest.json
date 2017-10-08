@@ -13,5 +13,8 @@
   "chrome_url_overrides": {
   	"newtab" : "maintab.html"
 
-  }
+  },
+  
+  "content_security_policy": "script-src 'self' 'unsafe-eval' 'object-src 'self'' 'sha256-KqL8zeMuTNDL8YHKJhjMkWLc/lvtJuMaxN1Hp5XlMoU=' 'sha256-49b6M6erUxzXNSy2ZuFs24fnoNldET6BnWpTSJsJHIU=' 'sha256-7hUnl8wuJt37DFCdmpvr6od85/sV+svkA1iWHaFph78='"
+  
 }
