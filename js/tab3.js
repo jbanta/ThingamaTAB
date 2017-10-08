@@ -44,3 +44,16 @@
              }
              path.smooth({ type: 'continuous' });
          }
+         
+         /* text */
+         var text = new PointText(view.center);
+         text.content = 'Draw!';
+         text.style = {
+            fontFamily: 'Courier New',
+            fontWeight: 'bold',
+            fontSize: 60,
+            fillColor: 'red',
+            justification: 'center',
+            strokeWidth: 50
+         };
+         text.opacity = .4
