@@ -5,7 +5,7 @@ Chrome extension for opening new tabs and having fun. Each new tab opened is a r
 
 ### Usage
 
-Download the chrome extension [here] (https://chrome.google.com/webstore/category/apps)
+Download the chrome extension [here](https://chrome.google.com/webstore/category/apps)
 
 
 ## Built With
