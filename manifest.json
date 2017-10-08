@@ -15,7 +15,7 @@
 
   },
 
-  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-bHdD/mJZ+/PVxUFl6ugP+XQLWZjRzAF+Rzy4P0peGCg=' 'sha256-F+SU63H1I0dDC1nnqWFcHF+m5Ml32sHRBTQeLUnkxOs=' 'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI=' 'sha256-6YikMxBAu2hycK94dC8LVz+jgFwn+0uH7jDiO+L63uo='"
+  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-kafbevE8uGxUnFAIkoa1OcSA79CrlKqjU0He9B6BnyM=' 'sha256-F+SU63H1I0dDC1nnqWFcHF+m5Ml32sHRBTQeLUnkxOs=' 'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI=' 'sha256-8vKqAbDP1me6gT0mp8I1q4JIKFXmg+urTjQX9eWIFU4='"
 
 
 }
