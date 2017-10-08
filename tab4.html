@@ -13,44 +13,64 @@
         var rectangles = [];
         var speeds = []; //array of speeds of individual rectangles
         numRectangles = 5;
-        var fastCircle = new Path.Circle({
-            center: [140, 70],
-            radius: 50,
-            fillColor: '#473109'
+        var fastbttn = new Path.Rectangle({
+            point: [0,0],
+            size: [window.innerWidth,window.innerHeight/2],
+            fillColor: '#99a9c6'
         })
-        var text = new PointText(new Point(140, 70));
-            text.justification = 'center';
-            text.fillColor = 'white';
-            text.content = 'FASTER';
-
-        var slowCircle = new Path.Circle({
-            center: [1100, 70],
-            radius: 50,
-            fillColor: '#473109'
+        var fasttext = new PointText([window.innerWidth/2,window.innerHeight/4]);
+            fasttext.justification = 'center';
+            fasttext.fillColor = '#dbdbdb';
+            fasttext.content = 'FASTER';
+            fasttext.fontSize = 60;
+            fasttext.style = {
+              fontFamily: 'Helvetica',
+              fontWeight: 'bold'
+            }
+        var slowbttn = new Path.Rectangle({
+            point: [0, window.innerHeight/2],
+            size: [window.innerWidth,window.innerHeight/2],
+            fillColor: '#dbdbdb'
         })
 
-        var text = new PointText(new Point(1100, 70));
-            text.justification = 'center';
-            text.fillColor = 'white';
-            text.content = 'SLOWER';
+        var slowtext = new PointText([window.innerWidth/2,window.innerHeight/4 *3.15]);
+            slowtext.justification = 'center';
+            slowtext.fillColor = '#99a9c6';
+            slowtext.content = 'SLOWER';
+            slowtext.fontSize = 60;
+            slowtext.style = {
+              fontFamily: 'Helvetica',
+              fontWeight: 'bold'
+            }
 
         //construct the rectangles
         for (var i = 0; i < numRectangles; i++) {
             rectangles[i] = new Path.Rectangle({
-                point: [ (window.innerWidth / 6 ) + i*(window.innerWidth / 6), window.innerHeight / 2.2],
-                size: [20, 60],
+                point: [ (window.innerWidth / 6 ) + i*(window.innerWidth / 6), window.innerHeight / 2.3],
+                size: [30, 100],
                 fillColor: '#473109'
             });
 
             speeds[i] = 0;
         }
-        slowCircle.onMouseDown = function(event) {
+        slowbttn.onMouseDown = function(event) {
             for (var i = 0; i < numRectangles; i++) {
                 speeds[i] -= 10;
 
             }
         }
-        fastCircle.onMouseDown = function(event) {
+        slowtext.onMouseDown = function(event) {
+            for (var i = 0; i < numRectangles; i++) {
+                speeds[i] -= 10;
+
+            }
+        }
+        fastbttn.onMouseDown = function(event) {
+            for (var i = 0; i < numRectangles; i++) {
+                speeds[i] += 20;
+            }
+        }
+        fasttext.onMouseDown = function(event) {
             for (var i = 0; i < numRectangles; i++) {
                 speeds[i] += 20;
             }
