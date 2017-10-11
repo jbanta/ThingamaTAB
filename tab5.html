@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>New Tab (Rays) </title>
+
+		<!-- Load CSS stylesheet -->
+		<link rel="stylesheet" href="style.css">
+	</head>
+
+	<body>
+		<canvas id="theCanvas5"></canvas>
+
+		<!-- Load the Paper.js library -->
+		<script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
+		<!-- Load external PaperScript and associate it with myCanvas -->
+		<script type="text/paperscript" canvas="theCanvas5">
+
+			var bars = []; //array that keeps track of all bars
+			var mouseDown = false;
+			var coverage = 40;
+
+			//load all bars
+			for (i = 0; i < window.innerHeight / coverage; i++) {
+	    		bars[i] = []; //make 2D array
+	    		for (j = 0; j < window.innerWidth / coverage; j++) {
+	    			bars[i][j] = new Path.Rectangle({
+	    				center: [j * window.innerWidth/20, i *  window.innerWidth/20],
+	    				size: [window.innerWidth/19.92, window.innerWidth/160] ,
+	    				fillColor: 'rgb(255, 255, 255)',
+						shadowColor: '#74a8a8'
+	    			});
+
+	    		}
+	    	}
+
+			//bars point toward mouse
+			function onMouseMove(event) {
+				mousePos = event.point;
+				for (i = 0; i < window.innerHeight / coverage; i++) {
+		    		for (j = 0; j < window.innerWidth / coverage; j++) {
+						bars[i][j].applyMatrix = false; //need to do this to be able to get current rotation amount of bar
+						var vector = bars[i][j].position - event.point; //get direction from bar to mouse
+						bars[i][j].rotation = 0; //reset angle to 0
+						//rotate bar by angle to mouse
+						if (!mouseDown) {
+							bars[i][j].rotate(vector.angle);
+						} else {
+							bars[i][j].rotate(vector.angle + 90);
+						}
+		    		}
+		    	}
+			}
+
+			//flips the face of bar that points at the mouse
+			function onMouseDown(event) {
+				mouseDown = true;
+				//double for loop pasted here so bars flip even when mouse isn't moving
+				for (i = 0; i < window.innerHeight / coverage; i++) {
+		    		for (j = 0; j < window.innerWidth / coverage; j++) {
+						bars[i][j].applyMatrix = false;
+						var vector = bars[i][j].position - event.point;
+						bars[i][j].rotation = 0;
+						if (!mouseDown) {
+							bars[i][j].rotate(vector.angle);
+						} else {
+							bars[i][j].rotate(vector.angle + 90);
+						}
+		    		}
+		    	}
+			}
+			//unflips the face of bar that points at the mouse
+			function onMouseUp(event) {
+				mouseDown = false;
+				//double for loop pasted here so bars flip even when mouse isn't moving
+				for (i = 0; i < window.innerHeight / coverage; i++) {
+		    		for (j = 0; j < window.innerWidth / coverage; j++) {
+						bars[i][j].applyMatrix = false;
+						var vector = bars[i][j].position - event.point;
+						bars[i][j].rotation = 0;
+						if (!mouseDown) {
+							bars[i][j].rotate(vector.angle);
+						} else {
+							bars[i][j].rotate(vector.angle + 90);
+						}
+		    		}
+		    	}
+			}
+
+		</script>
+	</body>
+
+</html>

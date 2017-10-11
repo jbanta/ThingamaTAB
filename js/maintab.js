@@ -1,4 +1,4 @@
-var numtabs = 4;
+var numtabs = 5;
 
 var tabIndex = Math.floor(Math.random() * numtabs) + 1;
 
