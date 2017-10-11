@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>New Tab (Turtles)</title>
+    
+	<!-- Load the Paper.js library -->
+	<script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
+	<!-- Load external PaperScript and associate it with myCanvas -->
+	<script type="text/paperscript" canvas="theCanvas6">
+       
+        var group = new Group();
+
+        var point = new Point(45, 60);
+        var tip = new PointText(point)
+        tip.fillColor = 'black';
+        tip.content = ' TIPS';
+        tip.style = {
+            fontWeight: 'bold',
+            fontSize: 40,
+            strokeWidth: 50
+         };
+
+        // Create onMouseEnter event for tip
+        tip.onMouseEnter = function(event) {
+
+            var text = new PointText(new Point(180, 50));
+            text.justification = 'left';
+            text.fillColor = 'black';
+            text.content = 'Hold Enter and Click';
+            text.style = {
+                fontWeight: 'bold',
+                fontSize: 20,
+                strokeWidth: 50
+                };
+              
+            text.name = 'text';
+            
+            var text1 = new PointText(new Point(180, 90));
+            text1.justification = 'left';
+            text1.fillColor = 'black';
+            text1.content = 'Hold Space';
+            text1.style = {
+                fontWeight: 'bold',
+                fontSize: 20,
+                strokeWidth: 50
+                };
+              
+            text1.name = 'text1';
+            
+            var text2 = new PointText(new Point(180, 130));
+            text2.justification = 'left';
+            text2.fillColor = 'black';
+            text2.content = 'Click and Drag';
+            text2.style = {
+                fontWeight: 'bold',
+                fontSize: 20,
+                strokeWidth: 50
+                };
+              
+            text2.name = 'text2';
+              
+            this.parent.addChild(text);
+            this.parent.addChild(text1);
+            this.parent.addChild(text2);
+        }
+        // Create onMouseLeave event for tip
+        tip.onMouseLeave = function(event) {
+            this.parent.children['text'].remove();
+            this.parent.children['text1'].remove();
+            this.parent.children['text2'].remove();
+        }
+        
+        /* Turtle class */    
+        function Turtle(position, idNumber) {
+            this.position = position;
+            
+            /*Event handling attributes*/
+            this.followMouse = false;
+            this.mousePos;
+            
+            /*Attributes for animating the body*/
+            this.velocity = new Point(0, 0);
+            this.acceleration = new Point(0, 0);           
+            this.maxSpeed = Math.random() * 0.1 + 0.15;
+            this.maxTravelSpeed = this.maxSpeed * 3.5;
+            this.maxForce = 0.2;
+            this.wanderTheta = 0;
+            this.orientation = 0;
+            this.lastOrientation = 0;
+            this.lastLocation;
+            this.deltaTheta = 0;
+            this.orientationCycle = 0;
+            
+            /*Attributes for animating the front fins*/
+            this.midToFront = true;
+            this.frontToMid = false;
+            this.midToBack = false;
+            this.backToMid = false;
+            this.moveCount = 0;
+            
+            /*Attributes for animating the back fins*/
+            this.goBack = true;
+            this.goFoward = false;
+            this.BMoveCount = 0;
+            
+            this.colours = [{s:"#1C4347", f:"#49ACBB"},
+                            {s:"#1b3b3a", f:"#61cac8"},
+                            {s:"#143e89", f:"#5f87d3"},
+                            {s:"#2d393f", f:"#88a5b3"},
+                            {s:"#270635", f:"#955fad"},
+                            {s:"#422b3a", f:"#b0809e"},
+                            {s:"#5b263a", f:"#d85c8a"},
+                            {s:"#600B2C", f:"#EB1962"}];
+                            
+            this.shellColor = this.colours[idNumber].f;
+            this.shellStrokeColor = this.colours[idNumber].s;
+            this.bodyPartsColor = '#8f939b';
+            this.bodyPartsStrokeColor = this.colours[idNumber].s;
+            
+            this.shellOpacity = .9;
+            this.shellStrokeWidth = 3;
+            this.bodyPartsOpacity = .8;
+            this.bodyPartsStrokeWidth = 3;
+            
+            ////////// Creating new turtle //////////
+            this.shell = new CompoundPath({
+                children: [
+                    //seg1
+                    new Path({
+                        segments: [[this.position.x + 120, this.position.y - 19], [this.position.x + 120, this.position.y + 19], 
+                                  [this.position.x + 100, this.position.y + 10], [this.position.x + 100, this.position.y - 10]],
+                        strokeWidth: 3,
+                        closed: true
+                        
+                    }), 
+                    //seg2
+                    new Path({
+                        segments: [[this.position.x + 100, this.position.y + 10], [this.position.x + 100, this.position.y - 10],
+                                  [this.position.x + 85, this.position.y - 16], [this.position.x + 70, this.position.y - 10], 
+                                  [this.position.x + 70, this.position.y + 10], [this.position.x + 85, this.position.y + 16]],
+                        strokeWidth: 3,
+                        closed: true
+                        
+                    }),
+                    //seg2line1
+                    new Path.Line({                 
+                        from: new Point(this.position.x + 85, this.position.y - 16), 
+                        to: new Point(this.position.x + 85, this.position.y - 37)
+                    }), 
+                    //seg2line2
+                    new Path.Line({
+                        from: new Point(this.position.x + 85, this.position.y + 16),
+                        to: new Point(this.position.x + 85, this.position.y + 37)
+                    }),
+                    //seg3
+                    new Path({
+                        segments: [[this.position.x + 70, this.position.y - 10], [this.position.x + 55, this.position.y - 15],
+                                  [this.position.x + 40, this.position.y - 6], [this.position.x + 40, this.position.y + 6],
+                                  [this.position.x + 55, this.position.y + 15], [this.position.x + 70, this.position.y + 10]],
+                        strokeWidth: 3,
+                        closed: true
+                        
+                    }),
+                    //seg3 to fix fillColor
+                    new Path({
+                        segments: [[this.position.x + 70, this.position.y - 10], [this.position.x + 55, this.position.y - 15],
+                                  [this.position.x + 40, this.position.y - 6], [this.position.x + 40, this.position.y + 6], 
+                                  [this.position.x + 55, this.position.y + 15], [this.position.x + 70, this.position.y + 10]],
+                        strokeWidth: 3,
+                        closed: true
+                        
+                    }),
+                    //seg3line1
+                    new Path.Line({
+                        from: new Point(this.position.x + 55, this.position.y - 15),
+                        to: new Point(this.position.x + 55, this.position.y - 38)
+                    }),
+                    //seg3line1
+                    new Path.Line({
+                        from: new Point(this.position.x + 55, this.position.y + 15),
+                        to: new Point(this.position.x + 55, this.position.y + 38)
+                    }),
+                    //seg4
+                    new Path({
+                        segments: [[this.position.x + 40, this.position.y - 6], [this.position.x + 24, this.position.y - 11],
+                                  [this.position.x + 2, this.position.y], [this.position.x + 24, this.position.y + 11], 
+                                  [this.position.x + 40, this.position.y + 6]],
+                        closed: true
+                        
+                    }),
+                    //seg4 to fix fillColor
+                    new Path({
+                        segments: [[this.position.x + 40, this.position.y - 6], [this.position.x + 24, this.position.y - 11],
+                                  [this.position.x + 2, this.position.y], [this.position.x + 24, this.position.y + 11], 
+                                  [this.position.x + 40, this.position.y + 6]],
+                        closed: true
+                        
+                    }),
+                    //seg4line1
+                    new Path.Line({
+                        from: new Point(this.position.x + 24, this.position.y - 11),
+                        to: new Point(this.position.x + 24, this.position.y - 25)
+                    }),
+                    //seg4line2
+                    new Path.Line({
+                        from: new Point(this.position.x + 24, this.position.y + 11),
+                        to: new Point(this.position.x + 24, this.position.y + 25)
+                    }),
+                  
+                    //left Shell
+                    new Path.Arc({
+                        from: new Point(this.position.x, this.position.y),
+                        through: new Point(this.position.x + 45, this.position.y - 35),
+                        to: new Point(this.position.x + 120, this.position.y - 20)
+
+                    }), 
+                    //right shell
+                    new Path.Arc({
+                        from: new Point(this.position.x, this.position.y),
+                        through: new Point(this.position.x + 45, this.position.y + 35),
+                        to: new Point(this.position.x + 120, this.position.y + 20)
+                    }),
+                    //top shell
+                    new Path.Line({
+                        from: new Point(this.position.x + 120, this.position.y - 20),
+                        to: new Point(this.position.x + 120, this.position.y + 20)
+                    })
+                ],
+                strokeColor: this.shellStrokeColor,
+                strokeWidth: this.shellStrokeWidth,
+                fillColor: this.shellColor,
+                opacity: this.shellOpacity
+                
+            });           
+            this.colorFix1 = new Path({
+                segments: [[this.position.x + 119, this.position.y - 20], [this.position.x + 100, this.position.y - 11], 
+                          [this.position.x + 89, this.position.y - 16]],
+                fillColor: this.shellColor,
+                opacity: this.shellOpacity
+            })   
+            this.colorFix2 = new Path({
+                segments: [[this.position.x + 119, this.position.y + 20], [this.position.x + 100, this.position.y + 11],
+                          [this.position.x + 89, this.position.y + 16]],
+                fillColor: this.shellColor,
+                opacity: this.shellOpacity
+            })
+            this.head = new Path({
+                segments: [[this.position.x + 121, this.position.y - 16], [this.position.x + 133, this.position.y - 14],
+                          [this.position.x + 142, this.position.y - 11], [this.position.x + 148, this.position.y - 7],
+                          [this.position.x + 156, this.position.y], [this.position.x + 148, this.position.y + 7],
+                          [this.position.x + 142,this.position.y + 11], [this.position.x + 133, this.position.y + 14], 
+                          [this.position.x + 121, this.position.y + 16]],
+                strokeColor: this.bodyPartsStrokeColor,
+                strokeWidth: this.bodyPartsStrokeWidth,
+                fillColor: this.bodyPartsColor,
+                closed: true,
+                opacity: this.bodyPartsOpacity
+            });
+            this.FLFin = new Path({
+                segments: [[this.position.x + 114, this.position.y - 24], [this.position.x + 110, this.position.y - 46], 
+                          [this.position.x + 103, this.position.y - 58], [this.position.x + 93, this.position.y - 68], 
+                          [this.position.x + 84, this.position.y - 73], [this.position.x + 93, this.position.y - 47],
+                          [this.position.x + 88, this.position.y - 36]],
+                strokeColor: this.bodyPartsStrokeColor,
+                strokeWidth: this.bodyPartsStrokeWidth,
+                fillColor: this.bodyPartsColor,
+                closed: true,
+                 opacity: this.bodyPartsStrokeWidth
+            });
+            this.FRFin = new Path({
+                segments: [[this.position.x + 114, this.position.y + 24], [this.position.x + 110, this.position.y + 46], 
+                          [this.position.x + 103, this.position.y + 58], [this.position.x + 93, this.position.y + 68], 
+                          [this.position.x + 84, this.position.y + 73], [this.position.x + 93, this.position.y + 47],
+                          [this.position.x + 88, this.position.y + 36]],
+                strokeColor: this.bodyPartsStrokeColor,
+                strokeWidth: this.bodyPartsStrokeWidth,
+                fillColor: this.bodyPartsColor,
+                closed: true,
+                opacity: this.bodyPartsOpacity
+            });
+            this.BLFin = new Path({
+                segments: [[this.position.x + 34, this.position.y - 17], [this.position.x + 30, this.position.y - 44], 
+                          [this.position.x + 23, this.position.y - 58], [this.position.x + 13, this.position.y - 68],
+                          [this.position.x + 4, this.position.y - 73], [this.position.x + 13, this.position.y - 47], 
+                          [this.position.x + 8, this.position.y - 30]],
+                strokeColor: this.bodyPartsStrokeColor,
+                strokeWidth: this.bodyPartsStrokeWidth,
+                fillColor: this.bodyPartsColor,
+                closed: true,
+                opacity: this.bodyPartsOpacity
+            }) 
+            this.BRFin = new Path({
+                segments: [[this.position.x + 34, this.position.y + 17], [this.position.x + 30, this.position.y + 44], 
+                          [this.position.x + 23, this.position.y + 58], [this.position.x + 13, this.position.y + 68],
+                          [this.position.x + 4, this.position.y + 73], [this.position.x + 13, this.position.y + 47], 
+                          [this.position.x + 8, this.position.y + 30]],
+                strokeColor: this.bodyPartsStrokeColor,
+                strokeWidth: this.bodyPartsStrokeWidth,
+                fillColor: this.bodyPartsColor,
+                closed: true,
+                opacity: this.bodyPartsOpacity
+            })
+            this.BLFin.rotate(-48);
+            this.BRFin.rotate(48);
+                       
+            ///////// animation functions ////////
+            
+            this.update = function() {
+                this.lastPosition = this.position.clone();
+                
+                this.velocity.x += this.acceleration.x;
+                this.velocity.y += this.acceleration.y;
+                this.velocity.length = Math.min(this.maxTravelSpeed, this.velocity.length);
+
+                this.position.x += this.velocity.x;
+                this.position.y += this.velocity.y;
+
+                this.acceleration.length = 0;
+                
+                this.lastOrientation = this.orientation;
+                
+                var locVector = new Point(this.position.x - this.lastPosition.x,
+                                          this.position.y - this.lastPosition.y);
+                
+                this.orientation = locVector.angle;
+                
+                this.deltaTheta = this.orientation - this.lastOrientation;
+                
+                this.updatePosition(this.velocity, this.deltaTheta, this.lastPosition);
+                this.wander();
+                this.checkBounds();
+
+              
+            }   
+            this.updatePosition = function(offset, delta, prevPos) {
+            
+                    this.shell.rotate(delta, prevPos);
+                    this.colorFix1.rotate(delta, prevPos);
+                    this.colorFix2.rotate(delta, prevPos);
+                    this.FLFin.rotate(delta, prevPos);
+                    this.FRFin.rotate(delta, prevPos);
+                    this.head.rotate(delta, prevPos);
+                    this.BLFin.rotate(delta, prevPos);
+                    this.BRFin.rotate(delta, prevPos);
+                    
+                    this.head.translate(offset);                
+                    this.shell.translate(offset);             
+                    this.colorFix1.translate(offset);               
+                    this.colorFix2.translate(offset);              
+                    this.FLFin.translate(offset);         
+                    this.FRFin.translate(offset);        
+                    this.BLFin.translate(offset);         
+                    this.BRFin.translate(offset);
+            }
+            this.steer = function(target, slowdown) {
+                var steer;
+                var desired	= new Point(target.x - this.position.x, target.y - this.position.y);
+                var dist = desired.length;
+                
+                if (dist > 0) {
+                    if (slowdown && dist < 100) {
+                        desired.length = (this.maxTravelSpeed) * (dist / 100);
+                    }
+                    else {
+                        desired.length = this.maxTravelSpeed;
+                    }
+                    
+                    steer = new Point(desired.x - this.velocity.x, desired.y - this.velocity.y);
+                    steer.length = Math.min(this.maxForce, steer.length);
+                }
+                else {
+                    steer = new Point(0, 0);
+                }
+                return steer;
+            }
+            this.seek = function(target) {
+                var steer = this.steer(target, false);
+                this.acceleration.x += steer.x;
+                this.acceleration.y += steer.y;
+            }
+            this.wander = function() {
+                if (this.followMouse) {
+                    if (this.position != this.mousePos) {
+                        this.seek(this.mousePos);
+                    }
+                    
+                }
+                else {
+                    var wanderR = 1; //5;
+                    var wanderD	= 100; //100;
+                    var change = .05; //0.05;
+                    
+                    this.wanderTheta += Math.random() * (change * 2) - change;
+                    
+                    var circleLocation = this.velocity.clone();
+                    circleLocation = circleLocation.normalize();
+                    circleLocation.x *= wanderD;
+                    circleLocation.y *= wanderD;
+                    circleLocation.x += this.position.x;
+                    circleLocation.y += this.position.y;
+                    
+                    var circleOffset = new Point(wanderR * Math.cos(this.wanderTheta), wanderR * Math.sin(this.wanderTheta));
+                    var target = new Point(circleLocation.x + circleOffset.x, circleLocation.y + circleOffset.y);
+                    
+                    this.seek(target);
+                }
+                
+            }     
+            this.checkBounds = function() {
+                var offset = 130;
+                if (this.position.x < -offset) {
+                    this.delete();
+                }
+                if (this.position.x > view.size.width + offset) {
+                    this.delete();
+                }
+                if (this.position.y < -offset) {
+                    this.delete();
+                }
+                if (this.position.y > view.size.height + offset) {
+                    this.delete();
+                }
+            }
+            this.updateFrontFins = function() {
+                /*prepare for update*/
+                this.FLFin.rotate((-1) * this.orientation, this.lastPosition);
+                this.FRFin.rotate((-1) * this.orientation, this.lastPosition);
+                
+                /* stuff for right fin */
+                var xDiffs = [];
+                var yDiffs = [];
+                var prevX = [];
+                var prevY = [];
+                for (var i = 0; i < this.FLFin.segments.length; i++) {
+                    prevX.push(this.FLFin.segments[i].point.x);
+                    prevY.push(this.FLFin.segments[i].point.y);
+                }
+                
+                /* Update left fin*/
+                if (this.midToFront) {
+                    
+                    this.orientationCycle = this.orientation;
+                    var numMoves = 9;
+                    
+                    this.FLFin.segments[1].point.x += (9/numMoves);
+                    this.FLFin.segments[2].point.x += (18/numMoves);
+                    this.FLFin.segments[3].point.x += (29/numMoves);
+                    this.FLFin.segments[4].point.x += (39/numMoves);
+                    this.FLFin.segments[4].point.y -= (11/numMoves);
+                    this.FLFin.segments[5].point.x += (4/numMoves);
+                    
+                    this.moveCount++;
+                    if (this.moveCount == numMoves) {
+                        this.frontToMid = true;
+                        this.midToFront = false;
+                        this.moveCount = 0;
+                    } 
+                } 
+                if (this.frontToMid) {
+                    var numMoves = 9;
+                    
+                    this.FLFin.segments[1].point.x -= (9/numMoves);
+                    this.FLFin.segments[2].point.x -= (18/numMoves);
+                    this.FLFin.segments[3].point.x -= (29/numMoves);
+                    this.FLFin.segments[4].point.x -= (39/numMoves);
+                    this.FLFin.segments[4].point.y += (11/numMoves);
+                    this.FLFin.segments[5].point.x -= (4/numMoves);
+                    
+                    this.moveCount++;
+                    if (this.moveCount == numMoves) {
+                        this.midToBack = true;
+                        this.frontToMid = false;
+                        this.moveCount = 0;
+                    } 
+                }
+                if (this.midToBack) {
+                    var numMoves = 7;
+                    this.orientationCycle = this.orientation;
+                    this.FLFin.segments[1].point.x -= (7/numMoves);
+                    this.FLFin.segments[2].point.x -= (12/numMoves) ;
+                    this.FLFin.segments[2].point.y += (5/numMoves);
+                    this.FLFin.segments[3].point.x -= (8/numMoves) ;
+                    this.FLFin.segments[3].point.y += (12/numMoves);
+                    this.FLFin.segments[4].point.x -= (13/numMoves) ;
+                    this.FLFin.segments[4].point.y += (15/numMoves);
+                    this.FLFin.segments[5].point.x -= (5/numMoves) ;
+                    this.FLFin.segments[5].point.y += (3/numMoves);
+                    
+                    this.moveCount++;
+                    if (this.moveCount == numMoves) {
+                        this.backToMid = true;
+                        this.midToBack = false;
+                        this.moveCount = 0;
+                    } 
+                }
+                if (this.backToMid) {
+                    
+                    var numMoves = 7;
+                    
+                    this.FLFin.segments[1].point.x += (7/numMoves);
+                    this.FLFin.segments[2].point.x += (12/numMoves);
+                    this.FLFin.segments[2].point.y -= (5/numMoves) ;
+                    this.FLFin.segments[3].point.x += (8/numMoves) ;
+                    this.FLFin.segments[3].point.y -= (12/numMoves) ;
+                    this.FLFin.segments[4].point.x += (13/numMoves);
+                    this.FLFin.segments[4].point.y -= (15/numMoves);
+                    this.FLFin.segments[5].point.x += (5/numMoves);
+                    this.FLFin.segments[5].point.y -= (3/numMoves);
+                    
+                    this.moveCount++;
+                    if (this.moveCount == numMoves) {
+                        this.midToFront = true;
+                        this.backToMid = false;
+                        this.moveCount = 0;
+                    } 
+                }
+                /* Update right fin*/
+                for (var i = 0; i < this.FLFin.segments.length; i++) {
+                    xDiffs.push(this.FLFin.segments[i].point.x - prevX[i]);
+                    yDiffs.push(this.FLFin.segments[i].point.y - prevY[i]);
+                }
+                for (var i = 0; i < this.FRFin.segments.length; i++) {
+                    this.FRFin.segments[i].point.x += xDiffs[i];
+                    this.FRFin.segments[i].point.y -= yDiffs[i];
+                }
+                
+                /*rotate back after updating*/
+                this.FLFin.rotate(this.orientation, this.lastPosition);
+                this.FRFin.rotate(this.orientation, this.lastPosition);
+            }         
+            this.updateBackFins = function() {
+                /*prepare for update*/
+                this.BLFin.rotate((-1) * this.orientation, this.lastPosition);
+                this.BRFin.rotate((-1) * this.orientation, this.lastPosition);
+         
+                /* stuff for right fin */
+                var xDiffs = [];
+                var yDiffs = [];
+                var prevX = [];
+                var prevY = [];
+                for (var i = 0; i < this.BLFin.segments.length; i++) {
+                    prevX.push(this.BLFin.segments[i].point.x);
+                    prevY.push(this.BLFin.segments[i].point.y);
+                }
+                
+                /* Update left fin*/
+                if (this.goBack) {
+                    
+                    var numMoves = 13;
+                    
+                    this.BLFin.segments[1].point.x -= 13/numMoves;
+                    this.BLFin.segments[1].point.y += 9/numMoves;
+                    this.BLFin.segments[2].point.x -= 10/numMoves;
+                    this.BLFin.segments[2].point.y += 20/numMoves;
+                    this.BLFin.segments[3].point.x -= 10/numMoves;
+                    this.BLFin.segments[3].point.y += 28/numMoves;
+                    this.BLFin.segments[4].point.x -= 5/numMoves;
+                    this.BLFin.segments[4].point.y += 35/numMoves;
+                    this.BLFin.segments[5].point.x -= 6/numMoves;
+                    this.BLFin.segments[5].point.y += 18/numMoves;
+                    
+                    this.BMoveCount++;
+                    if (this.BMoveCount == numMoves) {
+                        this.goFoward = true;
+                        this.goBack = false;
+                        this.BMoveCount = 0;
+                    }
+                }
+                if (this.goFoward) {
+                    
+                    var numMoves = 13;
+                
+                    this.BLFin.segments[1].point.x += 13/numMoves;
+                    this.BLFin.segments[1].point.y -= 9/numMoves;
+                    this.BLFin.segments[2].point.x += 10/numMoves;
+                    this.BLFin.segments[2].point.y -= 20/numMoves;
+                    this.BLFin.segments[3].point.x += 10/numMoves;
+                    this.BLFin.segments[3].point.y -= 28/numMoves;
+                    this.BLFin.segments[4].point.x += 5/numMoves;
+                    this.BLFin.segments[4].point.y -= 35/numMoves;
+                    this.BLFin.segments[5].point.x += 6/numMoves;
+                    this.BLFin.segments[5].point.y -= 18/numMoves;
+                    
+                    this.BMoveCount++;
+                    if (this.BMoveCount == numMoves) {
+                        this.goBack = true;
+                        this.goFoward = false;
+                        this.BMoveCount = 0;
+                    }
+                }
+                
+                /* Update right fin*/
+                for (var i = 0; i < this.BLFin.segments.length; i++) {
+                    xDiffs.push(this.BLFin.segments[i].point.x - prevX[i]);
+                    yDiffs.push(this.BLFin.segments[i].point.y - prevY[i]);
+                }
+                for (var i = 0; i < this.BRFin.segments.length; i++) {
+                    this.BRFin.segments[i].point.x += xDiffs[i];
+                    this.BRFin.segments[i].point.y -= yDiffs[i];
+                }
+                /*rotate back after updating*/
+                this.BLFin.rotate(this.orientation, this.lastPosition);
+                this.BRFin.rotate(this.orientation, this.lastPosition);
+            }
+            
+            this.delete = function() { 
+                this.shell.remove();
+                this.head.remove()
+                this.colorFix1.remove();
+                this.colorFix2.remove();
+                this.FLFin.remove();
+                this.FRFin.remove();
+                this.BLFin.remove();
+                this.BRFin.remove();
+            }
+        }
+            
+        ////////////// Main ///////////////////   
+        var color = 0;
+        var turtles = [];
+        //var start = new Point(100, Math.random() * view.size.height);
+        
+        /* create new turtles when enter and click */
+        function onMouseDown(event) {
+            if (Key.isDown('enter')) {
+                turtles.push(new Turtle(event.point, color));
+                color++;
+                if (color == 8) {
+                    color = 0;
+                }
+            }
+            else {
+                for (var i = 0; i < turtles.length; i++) {
+                    turtles[i].followMouse = true;
+                    turtles[i].mousePos = event.point;
+                }
+            }
+        }
+        /*Turtles follow mouse when dragged*/
+        function onMouseDrag(event) {
+            if (!Key.isDown('enter')) {
+                for (var i = 0; i < turtles.length; i++) {
+                    turtles[i].followMouse = true;
+                    turtles[i].mousePos = event.point;
+                }
+            }
+            
+        }
+        /*Make turtles return to normal after lifting mouse click*/
+        function onMouseUp(event) {
+            for (var i = 0; i < turtles.length; i++) {
+                turtles[i].followMouse = false;
+            }
+        }
+        /*Animation*/
+        function onFrame(event) {
+            /*
+            if (event.count % 500 == 0) {
+                turtles.push(new Turtle(new Point(-120, 200 + Math.random() * (view.size.height - 400)), color));
+                color++;
+                if (color == 8) {
+                    color = 0;
+                }
+            }
+            */
+            if (!Key.isDown('space')) {
+                for (var i = 0; i < turtles.length; i++) {
+                    turtles[i].update();
+                    if (event.count % 8 == 0) {
+                        turtles[i].updateFrontFins();
+                    }
+                    if (event.count % 10 == 0) {
+                        turtles[i].updateBackFins();
+                    }
+                }
+            }
+            
+        }
+        
+	</script>
+	<!-- Load CSS stylesheet -->
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<canvas id="theCanvas6"></canvas>
+        
+</body>
+</html>
