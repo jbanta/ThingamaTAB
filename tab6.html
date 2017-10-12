@@ -123,14 +123,22 @@
             this.goFoward = false;
             this.BMoveCount = 0;
             
-            this.colours = [{s:"#1C4347", f:"#49ACBB"},
-                            {s:"#1b3b3a", f:"#61cac8"},
-                            {s:"#143e89", f:"#5f87d3"},
+            this.colours = [{s:"#0b4428", f:"#1f9e5e"}, 
+                            {s:"#3d4440", f:"#97c6ac"}, 
+                            {s:"#1C4347", f:"#49ACBB"}, 
+                            {s:"#1b3b3a", f:"#61cac8"}, 
+                            {s:"#314d51", f:"#8cefff"}, 
+                            {s:"#02173a", f:"#0453d8"}, 
+                            {s:"#143e89", f:"#5f87d3"}, 
                             {s:"#2d393f", f:"#88a5b3"},
-                            {s:"#270635", f:"#955fad"},
-                            {s:"#422b3a", f:"#b0809e"},
-                            {s:"#5b263a", f:"#d85c8a"},
-                            {s:"#600B2C", f:"#EB1962"}];
+                            {s:"#2d323f", f:"#955fad"},
+                            {s:"#2d323f", f:"#8791b2"}, 
+                            {s:"#600B2C", f:"#EB1962"}, 
+                            {s:"#5b263a", f:"#d85c8a"}, 
+                            {s:"#422b3a", f:"#b0809e"}, 
+                            {s:"#422b3a", f:"#adb1ce"},
+                            {s:"#422b3a", f:"#d1a9cb"} 
+                            ];
                             
             this.shellColor = this.colours[idNumber].f;
             this.shellStrokeColor = this.colours[idNumber].s;
@@ -643,7 +651,7 @@
             if (Key.isDown('space')) {
                 turtles.push(new Turtle(event.point, color));
                 color++;
-                if (color == 8) {
+                if (color == 15) {
                     color = 0;
                 }
             }
@@ -676,7 +684,7 @@
             if (event.count % 500 == 0 && doToggle) {
                 turtles.push(new Turtle(new Point(-120, 200 + Math.random() * (view.size.height - 400)), color));
                 color++;
-                if (color == 8) {
+                if (color == 15) {
                     color = 0;
                 }
             }
