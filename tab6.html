@@ -8,11 +8,32 @@
 	<script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
 	<!-- Load external PaperScript and associate it with myCanvas -->
 	<script type="text/paperscript" canvas="theCanvas6">
-       
+        
+        var doToggle = true;
+        var toggle = new PointText(new Point(view.size.width - 45, 60 ));
+        toggle.justification = 'right';
+        toggle.fillColor = 'green';
+        toggle.content = 'TOGGLE TURTLES';
+        toggle.style = {
+            fontWeight: 'bold',
+            fontSize: 40,
+            strokeWidth: 50
+         };
+         
+         toggle.onMouseDown = function(event) {
+            if (this.fillColor == 'black') {
+                this.fillColor = 'green';
+                doToggle = true;
+            }
+            else {
+                this.fillColor = 'black';
+                doToggle = false;
+            }
+        }
+        
         var group = new Group();
 
-        var point = new Point(45, 60);
-        var tip = new PointText(point)
+        var tip = new PointText(new Point(45, 60));
         tip.fillColor = 'black';
         tip.content = ' TIPS';
         tip.style = {
@@ -20,14 +41,13 @@
             fontSize: 40,
             strokeWidth: 50
          };
-
         // Create onMouseEnter event for tip
         tip.onMouseEnter = function(event) {
 
             var text = new PointText(new Point(180, 50));
             text.justification = 'left';
             text.fillColor = 'black';
-            text.content = 'Hold Enter and Click';
+            text.content = 'Hold Space and Click';
             text.style = {
                 fontWeight: 'bold',
                 fontSize: 20,
@@ -39,7 +59,7 @@
             var text1 = new PointText(new Point(180, 90));
             text1.justification = 'left';
             text1.fillColor = 'black';
-            text1.content = 'Hold Space';
+            text1.content = 'Click and Drag';
             text1.style = {
                 fontWeight: 'bold',
                 fontSize: 20,
@@ -47,7 +67,7 @@
                 };
               
             text1.name = 'text1';
-            
+            /*
             var text2 = new PointText(new Point(180, 130));
             text2.justification = 'left';
             text2.fillColor = 'black';
@@ -59,16 +79,16 @@
                 };
               
             text2.name = 'text2';
-              
+              */
             this.parent.addChild(text);
             this.parent.addChild(text1);
-            this.parent.addChild(text2);
+            //this.parent.addChild(text2);
         }
         // Create onMouseLeave event for tip
         tip.onMouseLeave = function(event) {
             this.parent.children['text'].remove();
             this.parent.children['text1'].remove();
-            this.parent.children['text2'].remove();
+          //  this.parent.children['text2'].remove();
         }
         
         /* Turtle class */    
@@ -90,7 +110,6 @@
             this.lastOrientation = 0;
             this.lastLocation;
             this.deltaTheta = 0;
-            this.orientationCycle = 0;
             
             /*Attributes for animating the front fins*/
             this.midToFront = true;
@@ -412,13 +431,13 @@
                 if (this.position.x < -offset) {
                     this.delete();
                 }
-                if (this.position.x > view.size.width + offset) {
+                if (this.position.x > view.size.width + offset - 100) {
                     this.delete();
                 }
-                if (this.position.y < -offset) {
+                if (this.position.y < -offset + 100) {
                     this.delete();
                 }
-                if (this.position.y > view.size.height + offset) {
+                if (this.position.y > view.size.height + offset - 100) {
                     this.delete();
                 }
             }
@@ -439,8 +458,7 @@
                 
                 /* Update left fin*/
                 if (this.midToFront) {
-                    
-                    this.orientationCycle = this.orientation;
+                   
                     var numMoves = 9;
                     
                     this.FLFin.segments[1].point.x += (9/numMoves);
@@ -476,7 +494,6 @@
                 }
                 if (this.midToBack) {
                     var numMoves = 7;
-                    this.orientationCycle = this.orientation;
                     this.FLFin.segments[1].point.x -= (7/numMoves);
                     this.FLFin.segments[2].point.x -= (12/numMoves) ;
                     this.FLFin.segments[2].point.y += (5/numMoves);
@@ -621,16 +638,16 @@
         var turtles = [];
         //var start = new Point(100, Math.random() * view.size.height);
         
-        /* create new turtles when enter and click */
+        /* create new turtles when space and click */
         function onMouseDown(event) {
-            if (Key.isDown('enter')) {
+            if (Key.isDown('space')) {
                 turtles.push(new Turtle(event.point, color));
                 color++;
                 if (color == 8) {
                     color = 0;
                 }
             }
-            else {
+            else if (event.point.x < view.size.width - 410 || event.point.y > 70) {
                 for (var i = 0; i < turtles.length; i++) {
                     turtles[i].followMouse = true;
                     turtles[i].mousePos = event.point;
@@ -639,7 +656,7 @@
         }
         /*Turtles follow mouse when dragged*/
         function onMouseDrag(event) {
-            if (!Key.isDown('enter')) {
+            if (!Key.isDown('space') && (event.point.x < view.size.width - 410 || event.point.y > 70)) {
                 for (var i = 0; i < turtles.length; i++) {
                     turtles[i].followMouse = true;
                     turtles[i].mousePos = event.point;
@@ -655,26 +672,27 @@
         }
         /*Animation*/
         function onFrame(event) {
-            /*
-            if (event.count % 500 == 0) {
+           
+            if (event.count % 500 == 0 && doToggle) {
                 turtles.push(new Turtle(new Point(-120, 200 + Math.random() * (view.size.height - 400)), color));
                 color++;
                 if (color == 8) {
                     color = 0;
                 }
             }
-            */
-            if (!Key.isDown('space')) {
-                for (var i = 0; i < turtles.length; i++) {
-                    turtles[i].update();
-                    if (event.count % 8 == 0) {
-                        turtles[i].updateFrontFins();
-                    }
-                    if (event.count % 10 == 0) {
-                        turtles[i].updateBackFins();
-                    }
+            
+            //if (!Key.isDown('space')) { johann doesn't like this
+            for (var i = 0; i < turtles.length; i++) {
+                turtles[i].update();
+                if (event.count % 8 == 0) {
+                    turtles[i].updateFrontFins();
+                }
+                if (event.count % 10 == 0) {
+                    turtles[i].updateBackFins();
                 }
             }
+            //}
+            
             
         }
         
