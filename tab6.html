@@ -704,10 +704,10 @@
             //if (!Key.isDown('space')) { johann doesn't like this
             for (var i = 0; i < turtles.length; i++) {
                 turtles[i].update();
-                if (event.count % 8 == 0) {
+                if (event.count % 4 == 0) {
                     turtles[i].updateFrontFins();
                 }
-                if (event.count % 10 == 0) {
+                if (event.count % 5 == 0) {
                     turtles[i].updateBackFins();
                 }
             }
