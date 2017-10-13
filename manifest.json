@@ -1,4 +1,4 @@
-//{
+{
   "manifest_version": 2,
 
   "name": "ThingamaTAB",
@@ -15,13 +15,7 @@
 
   },
 
-  "content_security_policy": "script-src 'unsafe-eval' 'self'
-    'sha256-kafbevE8uGxUnFAIkoa1OcSA79CrlKqjU0He9B6BnyM='
-    'sha256-F+SU63H1I0dDC1nnqWFcHF+m5Ml32sHRBTQeLUnkxOs='
-    'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI='
-    'sha256-8vKqAbDP1me6gT0mp8I1q4JIKFXmg+urTjQX9eWIFU4='
-    'sha256-uM5ly04uj3BIDZdcahc1YsRKeZeao5jwrpoKhDXJ92k=' 
-    'sha256-Zwhb14N/GhTXxtCpWT7Br9pBLuZESp7DmxwBZ6BHchM='"
+  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-kafbevE8uGxUnFAIkoa1OcSA79CrlKqjU0He9B6BnyM=' 'sha256-F+SU63H1I0dDC1nnqWFcHF+m5Ml32sHRBTQeLUnkxOs=' 'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI=' 'sha256-8vKqAbDP1me6gT0mp8I1q4JIKFXmg+urTjQX9eWIFU4=' 'sha256-uM5ly04uj3BIDZdcahc1YsRKeZeao5jwrpoKhDXJ92k=' 'sha256-Zwhb14N/GhTXxtCpWT7Br9pBLuZESp7DmxwBZ6BHchM='"
 
 
 }
