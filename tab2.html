@@ -55,15 +55,13 @@
                 }
             }
         }
-        
+
         function onMouseDown(event) { //reload dots on click
-            if (event.button == 1) {
-                for (i = 0; i < window.innerHeight / 25; i++) {
-                    for (j = 0; j < window.innerWidth / 50; j++) {
-                        dots[i][j].position = [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight];
-                    }
-                }
-            }
+            for (i = 0; i < window.innerHeight / 25; i++) {
+        		for (j = 0; j < window.innerWidth / 50; j++) {
+        			dots[i][j].position = [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight];
+        		}
+        	}
         }
 
 

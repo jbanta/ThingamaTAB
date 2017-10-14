@@ -15,7 +15,7 @@
 
   },
 
-  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-fkuUI8MmmMWPrnfKUvGyRmAmBEWbgzYr3YBsnvrn6mA=' 'sha256-TTiCcQfpXaZvODamR0LOJT5HmmrSTVWDRmGqoMRrrlY=' 'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI=' 'sha256-8vKqAbDP1me6gT0mp8I1q4JIKFXmg+urTjQX9eWIFU4=' 'sha256-4lLa+NzMlVn/j81rNyS37OhFsu4p9p4lIduOzpQEOR0=' 'sha256-LyZATr2cOFfdSKyzaoCQLRuyJBQqSgTf+LHGFco3l+E='"
+  "content_security_policy": "script-src 'unsafe-eval' 'self' 'sha256-fkuUI8MmmMWPrnfKUvGyRmAmBEWbgzYr3YBsnvrn6mA=' 'sha256-N++L4gIdbapoaCBJJSi7yBL++BGlQ1HbQxd9lIy58xQ=' 'sha256-g2IjgUC2Q8Z/CwG0lsxklubv8qT9I/QSnHMiK/XBfkI=' 'sha256-8vKqAbDP1me6gT0mp8I1q4JIKFXmg+urTjQX9eWIFU4=' 'sha256-4lLa+NzMlVn/j81rNyS37OhFsu4p9p4lIduOzpQEOR0=' 'sha256-LyZATr2cOFfdSKyzaoCQLRuyJBQqSgTf+LHGFco3l+E='"
 
 
 }
