@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Tab (Boba)</title>
+    <title>New Tab</title>
 
 	</script>
 	<!-- Load CSS stylesheet -->
@@ -19,23 +19,22 @@
 
 
         //load dots
-    	for (i = 0; i < window.innerHeight / 40; i++) {
-    		dots[i] = [];
-    		for (j = 0; j < window.innerWidth / 40; j++) {
-    			dots[i][j] = new Path.Circle({
-    				center: [j * (window.innerWidth / 40) + (window.innerWidth / 90)*(i % 2) , i * (window.innerWidth / 40)],
-    				radius: window.innerWidth / 90,
-                    // speed: Math.floor(Math.random() * 5000) + 4800,
-    				fillColor: '#2b1809'
-    			});
 
-    		}
-    	}
+        for (i = 0; i < window.innerHeight / 50; i++) {
+            dots[i] = [];
+            for (j = 0; j < window.innerWidth / 50; j++) {
+                dots[i][j] = new Path.Circle({
+                    center: [j * 50 + 20*(i % 2), i * 50],
+                    radius: 20,
+                    fillColor: '#2b1809'
+                });
+            }
+        }
 
         //move away from mouse when mouse moves
-    	function onMouseMove(event) {
-    			for (i = 0; i < window.innerHeight / 40; i++) {
-    				for (j = 0; j < window.innerWidth / 40; j++) {
+        function onMouseMove(event) {
+            for (i = 0; i < window.innerHeight / 50; i++) {
+    				for (j = 0; j < window.innerWidth / 50; j++) {
     					var vector = event.point - dots[i][j].position; //get vector between mouse and dot
                         var distanceToMouse = event.point.getDistance(dots[i][j].position);
     					if (distanceToMouse < window.innerWidth / 6.5) { //if mouse is within certain distance of dot
@@ -58,9 +57,9 @@
         }
 
         function onMouseDown(event) { //reload dots on click
-            for (i = 0; i < window.innerHeight / 40; i++) {
-        		for (j = 0; j < window.innerWidth / 40; j++) {
-        			dots[i][j].position = [j * (window.innerWidth / 40) + (window.innerWidth / 90)*(i % 2) , i * (window.innerWidth / 40)];
+            for (i = 0; i < window.innerHeight / 50; i++) {
+        		for (j = 0; j < window.innerWidth / 50; j++) {
+        			dots[i][j].position = [j * 50 + 20*(i % 2), i * 50];
         		}
         	}
         }
