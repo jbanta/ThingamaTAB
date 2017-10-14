@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "ThingamaTAB",
-  "description": "Open a tab and have fun!",
+  "name": "ThingamaTABS",
+  "description": "Taking a break? Bored? Relieving stress? Open a new tab and play around with simple, fun, and interactive pages.",
   "version": "1.0",
 
   "browser_action": {
