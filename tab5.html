@@ -17,8 +17,10 @@
 		<script type="text/paperscript" canvas="theCanvas5">
 
 			var bars = []; //array that keeps track of all bars
-			var mouseDown = false;
+			var clickSwitch = false;
 			var coverage = 40;
+			var mousePos;
+			var mouseMoved = false;
 
 			//load all bars
 			for (i = 0; i < window.innerHeight / coverage; i++) {
@@ -27,64 +29,59 @@
 	    			bars[i][j] = new Path.Rectangle({
 	    				center: [j * window.innerWidth/15, i *  window.innerWidth/15],
 	    				size: [window.innerWidth/14.96, window.innerWidth/160] ,
-	    				fillColor: 'rgb(255, 255, 255)',
-						shadowColor: '#74a8a8'
+	    				fillColor: 'rgb(255, 255, 255)'
 	    			});
 
 	    		}
 	    	}
 
 			//bars point toward mouse
-			function onMouseMove(event) {
-				mousePos = event.point;
-				for (i = 0; i < window.innerHeight / coverage; i++) {
-		    		for (j = 0; j < window.innerWidth / coverage; j++) {
-						bars[i][j].applyMatrix = false; //need to do this to be able to get current rotation amount of bar
-						var vector = bars[i][j].position - event.point; //get direction from bar to mouse
-						bars[i][j].rotation = 0; //reset angle to 0
-						//rotate bar by angle to mouse
-						if (!mouseDown) {
-							bars[i][j].rotate(vector.angle);
-						} else {
-							bars[i][j].rotate(vector.angle + 90);
-						}
-		    		}
-		    	}
+			function onFrame(event) {
+				if (mouseMoved) {
+					for (i = 0; i < window.innerHeight / coverage; i++) {
+			    		for (j = 0; j < window.innerWidth / coverage; j++) {
+							bars[i][j].applyMatrix = false; //need to do this to be able to get current rotation amount of bar
+							var vector = bars[i][j].position - mousePos; //get direction from bar to mouse
+							bars[i][j].rotation = 0; //reset angle to 0
+
+							//rotate bar by angle to mouse
+							if (!clickSwitch) {
+								bars[i][j].rotate(vector.angle);
+							} else {
+								bars[i][j].rotate(vector.angle + 90);
+							}
+							updateColors();
+			    		}
+			    	}
+				}
+
 			}
 
-			//flips the face of bar that points at the mouse
-			function onMouseDown(event) {
-				mouseDown = true;
-				//double for loop pasted here so bars flip even when mouse isn't moving
-				for (i = 0; i < window.innerHeight / coverage; i++) {
-		    		for (j = 0; j < window.innerWidth / coverage; j++) {
-						bars[i][j].applyMatrix = false;
-						var vector = bars[i][j].position - event.point;
-						bars[i][j].rotation = 0;
-						if (!mouseDown) {
-							bars[i][j].rotate(vector.angle);
-						} else {
-							bars[i][j].rotate(vector.angle + 90);
-						}
-		    		}
-		    	}
+			function onMouseMove(event) { //update mouse position
+				mousePos = event.point;
+				mouseMoved = true;
 			}
-			//unflips the face of bar that points at the mouse
-			function onMouseUp(event) {
-				mouseDown = false;
-				//double for loop pasted here so bars flip even when mouse isn't moving
-				for (i = 0; i < window.innerHeight / coverage; i++) {
-		    		for (j = 0; j < window.innerWidth / coverage; j++) {
-						bars[i][j].applyMatrix = false;
-						var vector = bars[i][j].position - event.point;
-						bars[i][j].rotation = 0;
-						if (!mouseDown) {
-							bars[i][j].rotate(vector.angle);
-						} else {
-							bars[i][j].rotate(vector.angle + 90);
-						}
-		    		}
-		    	}
+
+			function onMouseDown(event) {
+				if (!clickSwitch) {
+					clickSwitch = true;
+				} else {
+					clickSwitch = false;
+				}
+			}
+
+			function updateColors() { //changes colors to warm/cool depending on if the mouse was clicked
+				if (!clickSwitch) {
+					if (bars[i][j].rotation < 135 && bars[i][j].rotation > 45) { bars[i][j].fillColor = '#dbfcff'; }
+					else if (bars[i][j].rotation > -135 && bars[i][j].rotation < -45) { bars[i][j].fillColor = '#54f0ff'; }
+					else if (bars[i][j].rotation > -45 && bars[i][j].rotation < 45) { bars[i][j].fillColor = '#91f9ff'; }
+					else { bars[i][j].fillColor = '#91f9ff'; }
+				} else {
+					if (bars[i][j].rotation < 135 && bars[i][j].rotation > 45) { bars[i][j].fillColor = '#fb87ff'; }
+					else if (bars[i][j].rotation > -135 && bars[i][j].rotation < -45) { bars[i][j].fillColor = '#fb87ff'; }
+					else if (bars[i][j].rotation > -45 && bars[i][j].rotation < 45) { bars[i][j].fillColor = '#fec6ff'; }
+					else { bars[i][j].fillColor = '#fa47ff'; }
+				}
 			}
 
 		</script>

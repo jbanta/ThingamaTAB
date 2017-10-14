@@ -15,33 +15,57 @@
 	<script type="text/paperscript" canvas="theCanvas2">
     	// Grid of dots that move away from mouse
 
-    	var dots = [];
+    	var dots = []; //where the arrays of rows are stored
 
-    	for (i = 0; i < window.innerHeight / 50; i++) {
+        //load dots
+    	for (i = 0; i < window.innerHeight / 25; i++) {
     		dots[i] = [];
     		for (j = 0; j < window.innerWidth / 50; j++) {
     			dots[i][j] = new Path.Circle({
-    				center: [j * 50 + 25, i * 50],
-    				radius: 20,
-    				fillColor: '#473109'
+    				center: [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight],
+    				radius: window.innerWidth / 60,
+                    speed: Math.floor(Math.random() * 5000) + 4800,
+    				fillColor: '#2b1809'
     			});
 
     		}
     	}
 
+        //move away from mouse when mouse moves
     	function onMouseMove(event) {
-    			for (i = 0; i < window.innerHeight / 50; i++) {
+    			for (i = 0; i < window.innerHeight / 25; i++) {
     				for (j = 0; j < window.innerWidth / 50; j++) {
-    					var vector = event.point - dots[i][j].position;
-    					if (event.point.getDistance(dots[i][j].position) < 400) {
-    						vector.length = 250 / (event.point.getDistance(dots[i][j].position)) ;
-    						dots[i][j].position = dots[i][j].position - vector;
-
+    					var vector = event.point - dots[i][j].position; //get vector between mouse and dot
+                        var distanceToMouse = event.point.getDistance(dots[i][j].position);
+    					if (distanceToMouse < window.innerWidth / 7) { //if mouse is within certain distance of dot
+    						vector.length = 350 / distanceToMouse ;
+    						dots[i][j].position = dots[i][j].position - vector; //distance itself from mouse
     					}
     				}
     			}
 
     	}
+
+        function onFrame(event) { //dots slowly drift down at different speeds
+            for (i = 0; i < window.innerHeight / 25; i++) {
+                for (j = 0; j < window.innerWidth / 50; j++) {
+                    var distanceToBottom = window.innerHeight - dots[i][j].position.y;
+                    var driftSpeed = dots[i][j].speed;
+                    dots[i][j].position.y += distanceToBottom / driftSpeed;
+                }
+            }
+        }
+        
+        function onMouseDown(event) { //reload dots on click
+            if (event.button == 1) {
+                for (i = 0; i < window.innerHeight / 25; i++) {
+                    for (j = 0; j < window.innerWidth / 50; j++) {
+                        dots[i][j].position = [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight];
+                    }
+                }
+            }
+        }
+
 
     </script>
 

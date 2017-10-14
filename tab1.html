@@ -17,17 +17,28 @@
 		<script type="text/paperscript" canvas="theCanvas1">
 			var circles = [];
 			var velocities = [];
-			var mousePosition;
+			var mousePosition = view.center;
+			var numCircles = 13;
 
-				circles[1] = new Path.Circle({center: view.center,radius: 500, fillColor: 'rgb(204, 48, 48)', strokeColor: 'rgb(204, 28, 48)'});
-				circles[2] = new Path.Circle({center: view.center,radius: 450, fillColor: 'rgb(204, 68, 48)', strokeColor: 'rgb(204, 48, 48)'});
-				circles[3] = new Path.Circle({center: view.center,radius: 400, fillColor: 'rgb(204, 88, 48)', strokeColor: 'rgb(204, 68, 48)'});
-				circles[4] = new Path.Circle({center: view.center,radius: 350, fillColor: 'rgb(204, 108, 48)', strokeColor: 'rgb(204, 88, 48)'});
-				circles[5] = new Path.Circle({center: view.center,radius: 300, fillColor: 'rgb(204, 128, 48)', strokeColor: 'rgb(204, 108, 48)'});
-				circles[6] = new Path.Circle({center: view.center,radius: 250, fillColor: 'rgb(204, 148, 48)', strokeColor: 'rgb(204, 128, 48)'});
-				circles[7] = new Path.Circle({center: view.center,radius: 200, fillColor: 'rgb(204, 168, 48)', strokeColor: 'rgb(204, 148, 48)'});
+				circles[1] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 360, fillColor: 'rgb(204, 38, 48)', strokeColor: 'rgb(204, 18, 48)'});
+				circles[2] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 330, fillColor: 'rgb(204, 48, 48)', strokeColor: 'rgb(204, 28, 48)'});
+				circles[3] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 300, fillColor: 'rgb(204, 58, 48)', strokeColor: 'rgb(204, 38, 48)'});
+				circles[4] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 270, fillColor: 'rgb(204, 68, 48)', strokeColor: 'rgb(204, 48, 48)'});
+				circles[5] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 240, fillColor: 'rgb(204, 78, 48)', strokeColor: 'rgb(204, 58, 48)'});
+				circles[6] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 210, fillColor: 'rgb(204, 88, 48)', strokeColor: 'rgb(204, 68, 48)'});
+				circles[7] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 180, fillColor: 'rgb(204, 98, 48)', strokeColor: 'rgb(204, 78, 48)'});
+				circles[8] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 150, fillColor: 'rgb(204, 108, 48)', strokeColor: 'rgb(204, 88, 48)'});
+				circles[9] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 120, fillColor: 'rgb(204, 128, 48)', strokeColor: 'rgb(204, 98, 48)'});
+				circles[10] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 90, fillColor: 'rgb(204, 138, 48)', strokeColor: 'rgb(204, 108, 48)'});
+				circles[11] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 60, fillColor: 'rgb(204, 148, 48)', strokeColor: 'rgb(204, 118, 48)'});
+				circles[12] = new Path.Circle({center: view.center, radius: window.innerWidth/15 + 30, fillColor: 'rgb(204, 158, 48)', strokeColor: 'rgb(204, 128, 48)'});
+				circles[13] = new Path.Circle({center: view.center, radius: window.innerWidth/15, fillColor: 'rgb(204, 168, 48)', strokeColor: 'rgb(204, 138, 48)'});
 
-				var group = new Group(circles[1],circles[2],circles[3],circles[4],circles[5],circles[6],circles[7]);
+				var group = new Group(circles[1],circles[2],circles[3],circles[4],circles[5],circles[6],circles[7],
+										circles[8],circles[9],circles[10],circles[11],circles[12],circles[13],circles[14]);
+
+				Math.sqrt( Math.pow(window.innerWidth/15, 2) - Math.pow(0))
+
 
 				group.style = {
 				    dashArray: [8, 20],
@@ -42,12 +53,12 @@
 
 
 			function onFrame(event) {
-				circles[1].position = mousePosition;
-				circles[1].rotate(.2);
-				for (i = 2; i < 8; i++) {
-					velocities[i] = circles[i-1].position - circles[i].position ;
-					circles[i].position += velocities[i]/15;
-					circles[i].rotate(.2*i);
+				circles[numCircles].position = mousePosition;
+				circles[numCircles].rotate(.1*numCircles);
+				for (i = numCircles-1; i > 0; i--) {
+					velocities[i] = circles[i+1].position - circles[i].position ;
+					circles[i].position += velocities[i]/5;
+					circles[i].rotate(.1*i);
 				}
 			}
 
