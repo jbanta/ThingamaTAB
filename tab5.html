@@ -18,7 +18,7 @@
 
 			var bars = []; //array that keeps track of all bars
 			var clickSwitch = false;
-			var coverage = 40;
+			var coverage = 50;
 			var mousePos;
 			var mouseMoved = false;
 
@@ -27,8 +27,8 @@
 	    		bars[i] = []; //make 2D array
 	    		for (j = 0; j < window.innerWidth / coverage; j++) {
 	    			bars[i][j] = new Path.Rectangle({
-	    				center: [j * window.innerWidth/15, i *  window.innerWidth/15],
-	    				size: [window.innerWidth/14.96, window.innerWidth/160] ,
+	    				center: [j * 120 - 500, i *  120 - 500],
+	    				size: [121, 20] ,
 	    				fillColor: 'rgb(255, 255, 255)'
 	    			});
 
@@ -43,6 +43,7 @@
 							bars[i][j].applyMatrix = false; //need to do this to be able to get current rotation amount of bar
 							var vector = bars[i][j].position - mousePos; //get direction from bar to mouse
 							bars[i][j].rotation = 0; //reset angle to 0
+							bars[i][j].rotate(.05, view.center);
 
 							//rotate bar by angle to mouse
 							if (!clickSwitch) {

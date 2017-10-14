@@ -17,14 +17,15 @@
 
     	var dots = []; //where the arrays of rows are stored
 
+
         //load dots
-    	for (i = 0; i < window.innerHeight / 25; i++) {
+    	for (i = 0; i < window.innerHeight / 40; i++) {
     		dots[i] = [];
-    		for (j = 0; j < window.innerWidth / 50; j++) {
+    		for (j = 0; j < window.innerWidth / 40; j++) {
     			dots[i][j] = new Path.Circle({
-    				center: [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight],
-    				radius: window.innerWidth / 60,
-                    speed: Math.floor(Math.random() * 5000) + 4800,
+    				center: [j * (window.innerWidth / 40) + (window.innerWidth / 90)*(i % 2) , i * (window.innerWidth / 40)],
+    				radius: window.innerWidth / 90,
+                    // speed: Math.floor(Math.random() * 5000) + 4800,
     				fillColor: '#2b1809'
     			});
 
@@ -33,12 +34,12 @@
 
         //move away from mouse when mouse moves
     	function onMouseMove(event) {
-    			for (i = 0; i < window.innerHeight / 25; i++) {
-    				for (j = 0; j < window.innerWidth / 50; j++) {
+    			for (i = 0; i < window.innerHeight / 40; i++) {
+    				for (j = 0; j < window.innerWidth / 40; j++) {
     					var vector = event.point - dots[i][j].position; //get vector between mouse and dot
                         var distanceToMouse = event.point.getDistance(dots[i][j].position);
-    					if (distanceToMouse < window.innerWidth / 7) { //if mouse is within certain distance of dot
-    						vector.length = 350 / distanceToMouse ;
+    					if (distanceToMouse < window.innerWidth / 6.5) { //if mouse is within certain distance of dot
+    						vector.length = 300 / distanceToMouse ;
     						dots[i][j].position = dots[i][j].position - vector; //distance itself from mouse
     					}
     				}
@@ -47,19 +48,19 @@
     	}
 
         function onFrame(event) { //dots slowly drift down at different speeds
-            for (i = 0; i < window.innerHeight / 25; i++) {
-                for (j = 0; j < window.innerWidth / 50; j++) {
-                    var distanceToBottom = window.innerHeight - dots[i][j].position.y;
-                    var driftSpeed = dots[i][j].speed;
-                    dots[i][j].position.y += distanceToBottom / driftSpeed;
-                }
-            }
+            // for (i = 0; i < window.innerHeight / 25; i++) {
+            //     for (j = 0; j < window.innerWidth / 50; j++) {
+            //         var distanceToBottom = window.innerHeight - dots[i][j].position.y;
+            //         var driftSpeed = dots[i][j].speed;
+            //         dots[i][j].position.y += distanceToBottom / driftSpeed;
+            //     }
+            // }
         }
 
         function onMouseDown(event) { //reload dots on click
-            for (i = 0; i < window.innerHeight / 25; i++) {
-        		for (j = 0; j < window.innerWidth / 50; j++) {
-        			dots[i][j].position = [j * (window.innerWidth / 25) + (window.innerWidth / 60)*(i % 2), i * (window.innerWidth / 25) - window.innerHeight];
+            for (i = 0; i < window.innerHeight / 40; i++) {
+        		for (j = 0; j < window.innerWidth / 40; j++) {
+        			dots[i][j].position = [j * (window.innerWidth / 40) + (window.innerWidth / 90)*(i % 2) , i * (window.innerWidth / 40)];
         		}
         	}
         }
